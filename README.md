@@ -8,6 +8,8 @@ This project was created to investigate how changes in case-mix affect discrimin
     - `1a_process_ari.R`
     - `1a_process_news.R`
   - `metadata`
+    - `ari-description.qmd`
+    - `news-description.qmd`
     - `metadata_ari.json`
     - `metadata_news.json`
 - `scripts`
