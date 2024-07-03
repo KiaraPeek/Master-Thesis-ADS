@@ -1,0 +1,99 @@
+---
+title: "news-description"
+format: html
+---
+
+## source
+
+https://datadryad.org/stash/dataset/doi:10.5061/dryad.d22q6vh
+
+```{r}
+suppressWarnings(library(data.table))
+suppressWarnings(library(ggplot2))
+suppressWarnings(library(dplyr))
+df <- readxl::read_excel(here::here("data", "raw", "NEWS_datafile.xls"))
+
+```
+
+## environments
+
+```{r}
+table(df$hospital)
+df <- df[df$hospital!='Aarau',]
+```
+
+drop Aarau as only 8 patients
+
+## outcomes
+
+### LOS
+
+```{r}
+ggplot(df, aes(x=LOS)) + geom_histogram(aes(fill=hospital), alpha=0.5)
+```
+
+```{r}
+ggplot(df, aes(x=LOS, col=hospital)) + geom_line(stat="ecdf")
+```
+
+define binary outcome based on greater or equal than 3 days cut-off
+
+```{r}
+df$los_geq3 <- df$LOS>=3
+```
+
+### saturation
+
+```{r}
+ggplot(df, aes(x=SpO2, col=hospital)) + geom_line(stat="ecdf")
+```
+
+Make binary outcome based on 97% or less
+
+```{r}
+df$spo2_leq97 <- df$SpO2<=97
+```
+
+## Preliminary analysis
+
+```{r}
+xvars <- c("temp", "age", "ICU")
+
+summary(glm(reformulate(xvars, "los_geq3"), family='binomial', data=df))
+summary(glm(reformulate(xvars, "spo2_leq97"), family='binomial', data=df))
+
+
+```
+
+## Tasks
+
+1.  predict `spo2_leq97` (saturation 97% or lower); a diagnostic task
+2.  predict `los_geq3` (length of stay of 3 days or higher); a prognostic task
+
+## Rates
+
+```{r}
+path_news <- here::here('data', 'processed', 'processed_news.csv')
+process_news <- read.csv(path_news)
+rates_los <- process_news %>% 
+  group_by(hospital) %>% 
+  summarise(
+    nr_outcome_los = sum(los_geq3),
+    nr_rows_hosp = n(),
+    outcome_perc_los = paste0(round((nr_outcome_los / nr_rows_hosp) * 100, 2), '%'),
+    hosp_perc = paste0(round((nr_rows_hosp / nrow(process_news)) * 100, 2), '%')
+  )
+print(rates_los)
+```
+
+```{r}
+rates_spo2 <- process_news %>% 
+  group_by(hospital) %>% 
+  summarise(
+    nr_outcome_spo2 = sum(spo2_leq97),
+    nr_rows_hosp = n(),
+    outcome_perc_spo2 = paste0(round((nr_outcome_spo2 / nr_rows_hosp) * 100, 2), '%'),
+    hosp_perc = paste0(round((nr_rows_hosp / nrow(process_news)) * 100, 2), '%')
+  )
+print(rates_spo2)
+```

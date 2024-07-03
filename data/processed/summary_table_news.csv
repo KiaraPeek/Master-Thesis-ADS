@@ -1,0 +1,9 @@
+"Variables","Missing_Data","Data_Type","Unique_Values"
+"hospital",0,"character",2
+"age",0,"numeric",81
+"SpO2",0,"numeric",27
+"LOS",0,"numeric",39
+"temp",0,"numeric",52
+"ICU",0,"factor",2
+"los_geq3",0,"factor",2
+"spo2_leq97",0,"factor",2
