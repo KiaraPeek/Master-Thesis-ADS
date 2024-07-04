@@ -42,5 +42,5 @@ To reproduce the results from this project, the data needs to be downloaded and 
   -   the raw data is processed
   -   the new processed data is stored under `data/processed`
   -   metadata files are created for both datasets: `metadata_ari.json` and `metadata_news.json`, and stored under `data/metadata`
-- In `2_fitmodels.R` logistic regression models are fit with the task information in the metadata files and evaluated with AUC and calibration plots which are stored in `results/graphics` and a results table is created `results_1trainenv.csv`
-- In `3_plot_results.R` the results table `results_1trainenv.csv` is used to plot arrows from the discrimination and calibration scores of the training set to the different test sets (`arrow_plot_trainenv_int.pdf` and `arrow_plot_trainenv_slope.pdf`), and the mean values for the results table are calculated.
+- In `2_fitmodels.R` logistic regression models are fit with the task information in the metadata files and evaluated with AUC and calibration plots which are stored in `results/graphics`, running the last function in the file runs the entire script and creates an overall results table: `results_1trainenv.csv`.
+- In `3_plot_results.R` the results table `results_1trainenv.csv` is used to plot arrows from the discrimination and calibration scores of the training set to the different test sets (`arrow_plot_trainenv_int.pdf` and `arrow_plot_trainenv_slope.pdf`), and the mean values of the results table are calculated.
